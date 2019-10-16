@@ -10,6 +10,7 @@ import EncryptedStorage from "../estorage";
 import { createValidationError, validate } from "./error";
 import middlewares from "./middlewares";
 
+// IAddr to start API at.
 export interface IAddr {
   host?: string;
   port?: number;
@@ -34,6 +35,7 @@ export default class API {
     id: Joi.string().required(),
   });
 
+  // creates a new API by given estorage to store encrypted key-value pairs and addr to listen at.
   constructor(estorage: EncryptedStorage, addr: IAddr = { host: "localhost", port: 0 } ) {
     this.estorage = estorage;
     this.addrOption = addr;

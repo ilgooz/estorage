@@ -7,6 +7,7 @@ export interface IDBAdapter {
   save(value: IItem): Promise<void>;
 }
 
+// IItem represents an item in db.
 export interface IItem {
   // hash of the data.
   hash: string;

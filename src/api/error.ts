@@ -34,16 +34,13 @@ export class ResponseError implements Error {
   }
 }
 
+// IFieldsValidation keeps invalid fields and their reason to be invalid as key, value pairs.
 export interface IFieldsValidation {
   [key: string]: string;
 }
 
-// createValidationError creates a new ResponseError for invalid http request payload.
-export function createValidationError(fields: IFieldsValidation): ResponseError {
-  return new ResponseError(400, "invalid inputs", fields);
-}
-
-// validate validates data (usually request.body) by using validation rules.
+// validate validates data (usually request.body) by using validation rules and returns
+// with invalid fields.
 export function validate(validator: Joi, data: object): IFieldsValidation {
   const { error } = Joi.validate(data, validator);
   if (!error) {
@@ -52,4 +49,9 @@ export function validate(validator: Joi, data: object): IFieldsValidation {
   const validation = {};
   error.details.forEach((e) => validation[e.path[0]] =  e.message);
   return validation;
+}
+
+// createValidationError creates a new ResponseError from IFieldsValidation(for invalid http request payloads).
+export function createValidationError(fields: IFieldsValidation): ResponseError {
+  return new ResponseError(400, "invalid inputs", fields);
 }

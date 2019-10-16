@@ -15,15 +15,18 @@ export default class MongoAdapter implements IDBAdapter {
     this.url = url;
   }
 
+  // find by id pattern.
   public async find(id: string): Promise<IItem[]> {
     const pattern = `^${id.replace("*", ".*")}$`;
     return await this.collection.find({ id: { $regex: pattern } }).toArray();
   }
 
+  // save item.
   public async save(value: IItem): Promise<void> {
     await this.collection.updateOne({ id: value.id }, { $set: value }, { upsert: true });
   }
 
+  // start mongo client.
   public async start() {
     const client = await MongoClient.connect(this.url, {
       useNewUrlParser: true,
@@ -34,6 +37,7 @@ export default class MongoAdapter implements IDBAdapter {
     await this.collection.createIndex( { id: "text" } );
   }
 
+  // stop mongo client.
   public async close() {
     await this.client.close();
   }
