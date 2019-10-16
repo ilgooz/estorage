@@ -67,9 +67,7 @@ export default class API {
   private async storeHandler(ctx) {
     const { id, encryption_key, value } = ctx.request.body;
     this.requireValidation(ctx, this.storeValidation);
-    await this.withStorageValidation(async () => {
-      await this.estorage.save(id, encryption_key, value);
-    });
+    await this.estorage.save(id, encryption_key, value);
     ctx.body = { id, value };
   }
 
@@ -77,9 +75,7 @@ export default class API {
   private async retriveHandler(ctx) {
     const { id, dencryption_key } = ctx.request.body;
     this.requireValidation(ctx, this.retriveValidation);
-    await this.withStorageValidation(async () => {
-      ctx.body = await this.estorage.find(id, dencryption_key);
-    });
+    ctx.body = await this.estorage.find(id, dencryption_key);
   }
 
   // requireValidation make sure that request payload is valid.
@@ -87,19 +83,6 @@ export default class API {
     const validationError = validate(validator, ctx.request.body);
     if (Object.keys(validationError).length) {
       throw createValidationError(validationError);
-    }
-  }
-
-  // withStorageValidation make sure catching any validation errors thrown by the EncryptedStorage
-  // to convert it to JSON error format to send it as a response.
-  private async withStorageValidation(func) {
-    try {
-      await func();
-    } catch (err) {
-      if (err.name === "EStorageIDValidationError") {
-        throw createValidationError({ id: err.message });
-      }
-      throw err;
     }
   }
 }
