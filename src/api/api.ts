@@ -56,7 +56,7 @@ export default class API {
 
     const app = new Koa();
     app.use(bodyParser());
-    app.use(...(middlewares.map((m) => m.bind(this))));
+    middlewares.map((m) => app.use(m.bind(this)));
     app.use(router.routes());
     app.use(router.allowedMethods());
 
