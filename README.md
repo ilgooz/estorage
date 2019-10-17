@@ -51,7 +51,7 @@ curl -X PUT http://localhost:5090/store -H "Content-Type: application/json" -d '
 ```
 #### Sample Usage
 ```
-curl -X POST http://localhost:5090/retrive -H "Content-Type: application/json" -d '{"id": "name-i*", "dencryption_key": "xxx"}'
+curl -X GET http://localhost:5090/retrive -H "Content-Type: application/json" -d '{"id": "name-i*", "dencryption_key": "xxx"}'
 ```
 
 ## Testing the Service
